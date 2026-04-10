@@ -131,4 +131,8 @@ npm start
 
 ## License
 
+<<<<<<< HEAD
 MIT
+=======
+MIT
+>>>>>>> 7861631417b19ab462208e166e92ed7ce52e8a43
