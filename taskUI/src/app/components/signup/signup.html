@@ -1,0 +1,49 @@
+<section class="auth-card">
+  <h2>Sign Up</h2>
+  <p class="subtitle">Create a new user for the Task Manager API.</p>
+
+  <form (ngSubmit)="onSubmit()" #signupForm="ngForm" class="auth-form">
+    <label for="signup-username">Username</label>
+    <input
+      id="signup-username"
+      name="username"
+      type="text"
+      [(ngModel)]="form.username"
+      placeholder="Choose a username"
+      required
+    />
+
+    <label for="signup-password">Password</label>
+    <input
+      id="signup-password"
+      name="password"
+      type="password"
+      [(ngModel)]="form.password"
+      placeholder="Choose a password"
+      required
+    />
+
+    <label for="signup-role">Role</label>
+    <select id="signup-role" name="role" [(ngModel)]="form.role">
+      <option value="User">User</option>
+      <!-- <option value="Admin">Admin</option> -->
+    </select>
+
+    <button type="submit" [disabled]="isSubmitting || signupForm.invalid">
+      {{ isSubmitting ? 'Creating account...' : 'Sign Up' }}
+    </button>
+  </form>
+
+  @if (errorMessage) {
+    <p class="message error">{{ errorMessage }}</p>
+  }
+
+  @if (successMessage) {
+    <p class="message success">{{ successMessage }}</p>
+  }
+
+  <p class="helper-text">
+    Already have an account?
+    <a routerLink="/login">Go to login</a>
+  </p>
+</section>

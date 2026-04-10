@@ -1,0 +1,82 @@
+<section class="page-card">
+  <h2>Admin APIs</h2>
+  <p class="subtitle">View all tasks and update user roles.</p>
+
+  @if (!authService.isLoggedIn()) {
+    <div class="message error">
+      Please <a routerLink="/login">login</a> first.
+    </div>
+  } @else if (!authService.isAdmin()) {
+    <div class="message error">
+      This page is only for Admin users.
+    </div>
+  } @else {
+    <div class="form-card">
+      <h3>Update User Role</h3>
+
+      <label for="user-id">User Id</label>
+      <input id="user-id" type="number" [(ngModel)]="roleForm.userId" />
+
+      <label for="role-value">Role</label>
+      <select id="role-value" [(ngModel)]="roleForm.role">
+        <option value="User">User</option>
+        <option value="Admin">Admin</option>
+      </select>
+
+      <button type="button" (click)="updateRole()" [disabled]="isUpdatingRole">
+        {{ isUpdatingRole ? 'Updating...' : 'Update Role' }}
+      </button>
+    </div>
+
+    @if (userOptions.length > 0) {
+      <div class="quick-users">
+        <p class="quick-title">Quick pick from loaded task data:</p>
+        <div class="chip-list">
+          @for (user of userOptions; track user.userId) {
+            <button type="button" class="chip-button" (click)="selectUser(user.userId)">
+              {{ user.username }} ({{ user.userId }})
+            </button>
+          }
+        </div>
+      </div>
+    }
+
+    <div class="toolbar">
+      <button type="button" class="secondary-button" (click)="loadAllTasks()" [disabled]="isLoading">
+        {{ isLoading ? 'Loading...' : 'Load All Tasks' }}
+      </button>
+    </div>
+
+    @if (message) {
+      <p class="message success">{{ message }}</p>
+    }
+
+    @if (errorMessage) {
+      <p class="message error">{{ errorMessage }}</p>
+    }
+
+    @if (tasks.length === 0 && !isLoading) {
+      <div class="empty-box">
+        No admin task data loaded yet. Click "Load All Tasks".
+      </div>
+    }
+
+    <div class="task-list">
+      @for (task of tasks; track task.id) {
+        <article class="task-card">
+          <div class="task-header">
+            <h3>{{ task.title }}</h3>
+            <span class="task-status" [class.completed]="task.isCompleted">
+              {{ task.isCompleted ? 'Completed' : 'Pending' }}
+            </span>
+          </div>
+
+          <p class="task-text">{{ task.description || 'No description' }}</p>
+          <p class="task-meta">Task Id: {{ task.id }}</p>
+          <p class="task-meta">User: {{ task.username }} ({{ task.userId }})</p>
+          <p class="task-meta">Created: {{ task.createdAt | date: 'medium' }}</p>
+        </article>
+      }
+    </div>
+  }
+</section>

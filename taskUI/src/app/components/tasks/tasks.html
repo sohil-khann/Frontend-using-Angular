@@ -1,0 +1,124 @@
+<section class="page-card">
+  <h2>My Tasks</h2>
+
+  @if (!authService.isLoggedIn()) {
+    <div class="message error">
+      Please <a routerLink="/login">login</a>
+    </div>
+  } @else {
+    <div class="form-card">
+      <h3>Create Task</h3>
+
+      <label for="task-title">Title</label>
+      <input
+        id="task-title"
+        name="taskTitle"
+        type="text"
+        [(ngModel)]="createForm.title"
+        placeholder="Enter task title"
+      />
+
+      <label for="task-description">Description</label>
+      <textarea
+        id="task-description"
+        name="taskDescription"
+        [(ngModel)]="createForm.description"
+        placeholder="Enter task description"
+        rows="3"
+      ></textarea>
+
+      <button type="button" (click)="createTask()" [disabled]="isCreating">
+        {{ isCreating ? 'Creating...' : 'Create Task' }}
+      </button>
+    </div>
+
+    <!-- <div class="toolbar">
+      <button type="button" class="secondary-button" (click)="loadTasks()" [disabled]="isLoading">
+        {{ isLoading ? 'Loading...' : 'Refresh Tasks' }}
+      </button>
+    </div> -->
+
+    @if (message) {
+      <p class="message success">{{ message }}</p>
+    }
+
+    @if (errorMessage) {
+      <p class="message error">{{ errorMessage }}</p>
+    }
+
+    @if (tasks.length === 0 && !isLoading) {
+      <div class="empty-box">
+        No tasks found yet. Create your first task above.
+      </div>
+    }
+
+    <div class="task-list">
+      @for (task of tasks; track task.id) {
+        <article class="task-card">
+          @if (editingTaskId === task.id) {
+            <div class="edit-grid">
+              <label>Title</label>
+              <input type="text" [(ngModel)]="editForm.title" />
+
+              <label>Description</label>
+              <textarea rows="3" [(ngModel)]="editForm.description"></textarea>
+
+              <label class="checkbox-row">
+                <input type="checkbox" [(ngModel)]="editForm.isCompleted" />
+                Completed
+              </label>
+
+              <div class="button-row">
+                <button
+                  type="button"
+                  (click)="saveTask(task.id)"
+                  [disabled]="isSaving "
+                >
+                  {{ isSaving ? 'Saving...' : 'Save' }}
+                </button>
+                <button
+                  type="button"
+                  class="secondary-button"
+                  (click)="cancelEdit()"
+                  [disabled]="isSaving "
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          } @else {
+            <div class="task-header">
+              <h3>{{ task.title }}</h3>
+              <span class="task-status" [class.completed]="task.isCompleted">
+                {{ task.isCompleted ? 'Completed' : 'Pending' }}
+              </span>
+            </div>
+
+            <p class="task-text">{{ task.description || 'No description' }}</p>
+            <p class="task-meta">Created: {{ task.createdAt | date: 'medium' }}</p>
+
+            <div class="button-row">
+              
+              <button type="button" (click)="startEdit(task)" >Edit</button>
+              <button
+                type="button"
+                class="secondary-button"
+                (click)="markComplete(task.id)"
+                [disabled]="task.isCompleted "
+              >
+                Complete
+              </button>
+              <button
+                type="button"
+                class="danger-button"
+                (click)="deleteTask(task.id)"
+              >
+                Delete
+              </button>
+            </div>
+          }
+        </article>
+      }
+    </div>
+  }
+</section>

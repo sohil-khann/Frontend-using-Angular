@@ -1,0 +1,52 @@
+<section class="auth-card">
+  <h2>Login</h2>
+  <p class="subtitle">Use your existing Task Manager account.</p>
+
+  <form (ngSubmit)="onSubmit()" #loginForm="ngForm" class="auth-form">
+    <label for="login-username">Username</label>
+    <input
+      id="login-username"
+      name="username"
+      type="text"
+      [(ngModel)]="form.username"
+      placeholder="Enter username"
+      required
+    />
+
+    <label for="login-password">Password</label>
+    <input
+      id="login-password"
+      name="password"
+      type="password"
+      [(ngModel)]="form.password"
+      placeholder="Enter password"
+      required
+    />
+
+    <button type="submit" [disabled]="isSubmitting || loginForm.invalid">
+      {{ isSubmitting ? 'Logging in...' : 'Login' }}
+    </button>
+  </form>
+
+  @if (errorMessage) {
+    <p class="message error">{{ errorMessage }}</p>
+  }
+
+  @if (successMessage) {
+    <p class="message success">{{ successMessage }}</p>
+  }
+
+  @if (auth.currentUser(); as user) {
+    <div class="login-result">
+      <h3>Logged In User</h3>
+      <p><strong>Username:</strong> {{ user.username }}</p>
+      <p><strong>Role:</strong> {{ user.role }}</p>
+      <p><strong>Token saved:</strong> Yes</p>
+    </div>
+  }
+
+  <p class="helper-text">
+    New user?
+    <a routerLink="/signup">Create an account</a>
+  </p>
+</section>

@@ -1,0 +1,33 @@
+<main class="page-shell">
+  <section class="hero-card">
+    <p class="eyebrow">TASK MANAGER</p>
+
+
+    <nav class="nav-links">
+      <a routerLink="/login" routerLinkActive="active-link">Login</a>
+      <a routerLink="/signup" routerLinkActive="active-link">Sign Up</a>
+      @if (authService.isLoggedIn()) {
+        <a routerLink="/tasks" routerLinkActive="active-link">My Tasks</a>
+      }
+      @if (authService.isAdmin()) {
+        <a routerLink="/admin" routerLinkActive="active-link">Admin</a>
+      }
+    </nav>
+
+    <div class="status-box">
+      @if (authService.currentUser(); as user) {
+        <p><strong>Status:</strong> Logged in</p>
+        <p><strong>Username:</strong> {{ user.username }}</p>
+        <p><strong>Role:</strong> {{ user.role }}</p>
+        <button type="button" class="secondary-button" (click)="authService.logout()">Logout</button>
+      } @else {
+        <p><strong>Status:</strong> Not logged in</p>
+       
+      }
+    </div>
+  </section>
+
+  <section class="content-card">
+    <router-outlet />
+  </section>
+</main>
